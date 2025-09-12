@@ -105,7 +105,8 @@ func main() {
 	//log.Println(user.Name, *user.Num)
 
 	//删除评论时，触发钩子函数,全部删除post_id=1的
-	if err := global.Db.Debug().Where("post_id=?", 1).Delete(&model.Comment{}).Error; err != nil {
+	comment := &model.Comment{PostID: 1}
+	if err := global.Db.Debug().Model(comment).Where("post_id=?", comment.PostID).Delete(comment).Error; err != nil {
 		log.Fatalln("删除评论时失败", err)
 		return
 	}

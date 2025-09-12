@@ -1,6 +1,8 @@
 package model
 
 import (
+	"log"
+
 	"gorm.io/gorm"
 )
 
@@ -34,12 +36,13 @@ func (p *Post) AfterCreate(tx *gorm.DB) (err error) {
 }
 
 func (c *Comment) AfterDelete(tx *gorm.DB) (err error) {
+	log.Println("---------", c.PostID)
 	var count int64
-	if err := tx.Debug().Model(&Post{}).Where("post_id=?", c.PostID).Count(&count).Error; err != nil {
+	if err := tx.Debug().Model(&Comment{}).Where("post_id=?", c.PostID).Count(&count).Error; err != nil {
 		return err
 	}
 	if count == 0 {
-		if err = tx.Debug().Model(&Post{}).UpdateColumn("com_status", "无评论").Where("id=?", c.PostID).Error; err != nil {
+		if err = tx.Debug().Model(&Post{}).Where("id=?", c.PostID).UpdateColumn("com_status", "无评论").Error; err != nil {
 			return err
 		}
 	}
