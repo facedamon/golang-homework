@@ -1,0 +1,6 @@
+database:
+  dsn: root:root@tcp(127.0.0.1:3306)/golang_test?charset=utf8&parseTime=true&loc=Local
+  maxIdleConns: 10
+  maxOpenConns: 100
+app:
+  port: :8081
